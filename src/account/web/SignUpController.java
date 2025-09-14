@@ -1,6 +1,8 @@
 package account.web;
 
 import account.domain.User;
+import account.dto.ChangePasswordRequestDTO;
+import account.dto.ChangedPasswordResponseDTO;
 import account.dto.UserDetailsDTO;
 import account.dto.UserDetailsResponseDTO;
 import account.service.UserService;
@@ -41,7 +43,7 @@ public class SignUpController {
         if (userOptional.isPresent()) {
             user = userOptional.get();
         } else {
-            throw new RuntimeException("User not found");
+            throw new UsernameNotFoundException("User not found");
         }
 
         return new UserDetailsResponseDTO(
@@ -50,5 +52,11 @@ public class SignUpController {
                 user.getLastname(),
                 user.getEmail().toLowerCase()
         );
+    }
+
+    @PostMapping(path = "/api/auth/changepass")
+    public ChangedPasswordResponseDTO changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequestDTO, Authentication authentication) {
+        String newPassword = changePasswordRequestDTO.getNew_password();
+        return userService.changePassword(authentication.getName(), newPassword);
     }
 }
