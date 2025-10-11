@@ -43,15 +43,11 @@ public class UserService {
         }
 
         String encodedPassword = passwordEncoder.encode(userDetailsDTO.getPassword());
-        User user = User.builder().name(userDetailsDTO.getName()).lastname(userDetailsDTO.getLastname()).email(userDetailsDTO.getEmail()).password(encodedPassword).build();
+        User user = User.builder().name(userDetailsDTO.getName()).lastname(userDetailsDTO.getLastname()).email(userDetailsDTO.getEmail().toLowerCase()).password(encodedPassword).build();
         User savedUSer = userRepository.save(user);
         log.info("User {} has been registered successfully", userDetailsDTO.getName());
         return new UserDetailsResponseDTO(savedUSer.getId(), savedUSer.getName(), savedUSer.getLastname(), savedUSer.getEmail());
 
-    }
-
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmailIgnoreCase(email);
     }
 
     public ChangedPasswordResponseDTO changePassword(String email, String newPassword) {
@@ -70,5 +66,9 @@ public class UserService {
         userRepository.save(user);
 
         return new ChangedPasswordResponseDTO(user.getEmail().toLowerCase(),"The password has been updated successfully");
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmailIgnoreCase(email);
     }
 }

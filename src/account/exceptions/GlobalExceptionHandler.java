@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -37,8 +38,7 @@ public class GlobalExceptionHandler {
                 .getFieldErrors()
                 .stream()
                 .map(fieldError -> fieldError.getDefaultMessage())
-                .findFirst()
-                .orElse("Validation error");
+                .collect(Collectors.joining(", "));
         return badRequest(request, errorMessage);
     }
 
@@ -51,5 +51,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ BreachedPasswordException.class, DuplicatePasswordException.class })
     public ResponseEntity<Object> handlePasswordPolicy(RuntimeException ex, HttpServletRequest request) {
         return badRequest(request, ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArg(IllegalArgumentException ex, HttpServletRequest req) {
+        return badRequest(req, ex.getMessage() == null ? "" : ex.getMessage());
     }
 }

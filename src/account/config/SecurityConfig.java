@@ -1,7 +1,5 @@
 package account.config;
 
-import account.repository.UserRepository;
-import account.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,6 +35,8 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions().disable()) // For the H2 console
                 .authorizeHttpRequests(auth -> auth  // manage access
                                 .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/acct/payments").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/acct/payments").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll() //
                                 .requestMatchers(HttpMethod.POST, "/actuator/shutdown").permitAll()
                                 .anyRequest().authenticated()
