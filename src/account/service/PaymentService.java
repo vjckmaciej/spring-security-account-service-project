@@ -4,11 +4,10 @@ import account.domain.Payment;
 import account.dto.PaymentDTO;
 import account.repository.PaymentRepository;
 import account.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -17,9 +16,9 @@ import java.util.Optional;
 
 import static java.util.Comparator.comparing;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;

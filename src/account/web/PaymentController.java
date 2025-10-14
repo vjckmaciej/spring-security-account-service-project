@@ -29,6 +29,8 @@ public class PaymentController {
         User user = userService.getUserByEmail(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        log.info("Auth: name={}, authorities={}", authentication.getName(), authentication.getAuthorities());
+
         if (period != null) {
             var payrollRecord = paymentService.getPaymentByEmailAndPeriod(user.getEmail(), period);
             return payrollRecord

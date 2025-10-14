@@ -1,6 +1,8 @@
 package account.service;
 
 import account.repository.UserRepository;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,10 +19,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         var user = userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new UsernameNotFoundException(email));
 
-        return org.springframework.security.core.userdetails.User
+        var authorities = user.getRoles().stream()
+                .map(Enum::name)
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+
+        return User
                 .withUsername(user.getEmail().toLowerCase())
                 .password(user.getPassword())
-                .authorities("USER")
+                .authorities(authorities)
                 .build();
     }
 }
