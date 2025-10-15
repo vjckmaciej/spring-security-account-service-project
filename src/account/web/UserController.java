@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,5 +46,11 @@ public class UserController {
     public UserDetailsResponseDTO changeRole(@RequestBody @Valid ChangeRoleRequestDTO changeRoleRequestDTO) {
         User updatedUser = userService.changeRole(changeRoleRequestDTO);
         return userMapper.toDto(updatedUser);
+    }
+
+    @PutMapping(path = "/api/admin/user/access")
+    public Map<String, String> changeAccess(@RequestBody @Valid UserAccessRequestDTO userAccessRequestDTO) {
+        String message = userService.changeAccess(userAccessRequestDTO);
+        return Map.of("status", message);
     }
 }

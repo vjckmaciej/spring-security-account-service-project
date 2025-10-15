@@ -1,12 +1,15 @@
 package account.service;
 
 import account.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -28,6 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .withUsername(user.getEmail().toLowerCase())
                 .password(user.getPassword())
                 .authorities(authorities)
+                .accountLocked(user.isLocked())
                 .build();
     }
 }

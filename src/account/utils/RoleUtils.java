@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class RoleUtils {
     private static final Set<Role> ADMIN_GROUP = Set.of(Role.ROLE_ADMINISTRATOR);
-    private static final Set<Role> BUSINESS_GROUP = Set.of(Role.ROLE_USER, Role.ROLE_ACCOUNTANT);
+    private static final Set<Role> BUSINESS_GROUP = Set.of(Role.ROLE_USER, Role.ROLE_ACCOUNTANT, Role.ROLE_AUDITOR);
 
     public static boolean isAdminGroup(Role role) {
         return ADMIN_GROUP.contains(role);
@@ -32,12 +32,16 @@ public class RoleUtils {
 
     // maps string -> Role (accepts "USER" and "ROLE_USER")
     public static Optional<Role> fromString(String raw) {
-        if (raw == null || raw.isBlank()) return Optional.empty();
-        String up = raw.toUpperCase(Locale.ROOT);
-        String normalized = up.startsWith("ROLE_") ? up : "ROLE_" + up;
+        if (raw == null || raw.isBlank()) {
+            return Optional.empty();
+        }
+        String normalized = raw.toUpperCase();
+        if (!normalized.startsWith("ROLE_")) {
+            normalized = "ROLE_" + normalized;
+        }
         try {
             return Optional.of(Role.valueOf(normalized));
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ex) {
             return Optional.empty();
         }
     }

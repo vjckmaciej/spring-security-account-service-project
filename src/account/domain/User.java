@@ -31,6 +31,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @Column(nullable = false)
+    private int failedAttempts = 0;
+
+    @Column(nullable = false)
+    private boolean locked = false;
+
     public User(String name, String lastname, String email, String password, Set<Role> roles) {
         this.name = name;
         this.lastname = lastname;
