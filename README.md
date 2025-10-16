@@ -144,9 +144,6 @@ server.port=8443
 ```
 
 ### 3. Run the Application
-```bash
-./mvnw spring-boot:run
-```
 The service will be available at:
 ```bash
 [./mvnw spring-boot:run](https://localhost:8443)
